@@ -39,7 +39,7 @@ bot.mention in: "#screenshots" do |event|
     output_file_path = File.join("tmp", "output", "#{File.basename(input_file, ".*")}.png")
 
     _stdout, stderr, status = Open3.capture3(
-      "#{ESRGAN_HOME}/realesrgan-ncnn-vulkan -i #{input_file.path} -o #{output_file_path}"
+      "#{ESRGAN_HOME}/realesrgan-ncnn-vulkan -i #{input_file.path} -o #{output_file_path} -s 2"
     )
 
     if status.exitstatus != 0
