@@ -36,17 +36,18 @@ bot.mention in: "#screenshots" do |event|
 
     event.message.reply! "Starting upscale, this can take a while"
 
-    output_file_name = "#{File.basename(input_file, ".*")}.png"
-    output_file = File.new(File.join("tmp", "output", output_file_name))
+    output_file_path = File.join("tmp", "output", "#{File.basename(input_file, ".*")}.png")
 
     _stdout, stderr, status = Open3.capture3(
-      "realesrgan-ncnn-vulkan -i #{input_file.path} -o #{output_file}"
+      "realesrgan-ncnn-vulkan -i #{input_file.path} -o #{output_file_path}"
     )
 
     if status.exitstatus != 0
       event.message.reply! "Something went wrong"
       puts stderr
     else
+      output_file = File.new(output_file_path)
+
       messages = [
         "I got you covered!",
         "Here you go!",
