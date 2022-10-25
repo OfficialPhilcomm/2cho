@@ -54,10 +54,14 @@ bot.mention in: "#screenshots" do |event|
         "Enjoy!"
       ]
 
-      event.message.reply!(
-        messages.sample,
-        attachments: [output_file]
-      )
+      begin
+        event.message.reply!(
+          messages.sample,
+          attachments: [output_file]
+        )
+      rescue RestClient::PayloadTooLarge
+        event.message.reply! "I am sorry, but the upscaled image is too big to upload"
+      end
 
       File.delete(output_file)
     end
