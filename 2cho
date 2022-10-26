@@ -3,4 +3,10 @@ require_relative "lib/upscale_bot"
 
 Dotenv.load
 
-TwoCho::UpscaleBot.new.run
+upscale_bot = TwoCho::UpscaleBot.new
+
+begin
+  upscale_bot.run
+rescue Interrupt
+  upscale_bot.stop
+end
