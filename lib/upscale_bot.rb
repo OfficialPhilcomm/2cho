@@ -10,6 +10,16 @@ module TwoCho
     attr_reader :bot
 
     def initialize
+      build_bot
+    end
+
+    def run
+      bot.run
+    end
+
+    private
+
+    def build_bot
       @bot = Discordrb::Bot.new(token: ENV["TOKEN"])
 
       bot.mention in: "#screenshots" do |event|
@@ -49,15 +59,9 @@ module TwoCho
           else
             output_file = File.new(output_file_path)
 
-            messages = [
-              "I got you covered!",
-              "Here you go!",
-              "Enjoy!"
-            ]
-
             begin
               event.message.reply!(
-                messages.sample,
+                success_messages,
                 attachments: [output_file]
               )
             rescue RestClient::PayloadTooLarge
@@ -70,8 +74,12 @@ module TwoCho
       end
     end
 
-    def run
-      bot.run
+    def success_messages
+      [
+        "I got you covered!",
+        "Here you go!",
+        "Enjoy!"
+      ].sample
     end
   end
 end
