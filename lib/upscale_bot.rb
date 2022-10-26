@@ -4,11 +4,10 @@ require "dotenv"
 require "httparty"
 require "tempfile"
 require "discordrb"
-require_relative "file_server"
 
 module TwoCho
   class TwoCho::UpscaleBot
-    attr_reader :bot, :file_server
+    attr_reader :bot
 
     def initialize
       @bot = Discordrb::Bot.new(token: ENV["TOKEN"])
@@ -69,18 +68,10 @@ module TwoCho
           end
         end
       end
-
-      @file_server = TwoCho::FileServer.new(3000)
     end
 
     def run
       bot.run
-      file_server.run
-    end
-
-    def stop
-      bot.stop
-      file_server.stop
     end
   end
 end
