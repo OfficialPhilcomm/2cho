@@ -1,5 +1,5 @@
 .env
-
+config.yml
 tmp/
 
 .DS_Store

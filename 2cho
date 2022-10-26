@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
+require_relative "lib/config"
 require_relative "lib/upscale_bot"
 
-Dotenv.load
-
+TwoCho::Config.init
 TwoCho::UpscaleBot.new.run

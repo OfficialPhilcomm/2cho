@@ -5,6 +5,7 @@ require "dotenv"
 require "httparty"
 require "tempfile"
 require "discordrb"
+require_relative "config"
 
 module TwoCho
   class TwoCho::UpscaleBot
@@ -21,7 +22,7 @@ module TwoCho
     private
 
     def build_bot
-      @bot = Discordrb::Bot.new(token: ENV["TOKEN"])
+      @bot = Discordrb::Bot.new(token: TwoCho::Config.discord.token)
 
       bot.mention in: "#screenshots" do |event|
         unless event.message.attachments.any?
@@ -87,7 +88,7 @@ module TwoCho
 
     def upscale_image(input_file_path, output_file_path)
       _stdout, stderr, status = Open3.capture3(
-        "#{ENV["ESRGAN_HOME"]}/realesrgan-ncnn-vulkan -i #{input_file_path} -o #{output_file_path} -s 2"
+        "#{TwoCho::Config.esrgan.home}/realesrgan-ncnn-vulkan -i #{input_file_path} -o #{output_file_path} -s 2"
       )
 
       if status.exitstatus != 0
@@ -105,15 +106,15 @@ module TwoCho
     def move_file_to_storage(file)
       folder = Date.today.strftime("%Y%m%d")
 
-      if !Dir.exist?(File.join(ENV["WEBSERVER_HOME"], folder))
-        Dir.mkdir File.join(ENV["WEBSERVER_HOME"], folder)
+      if !Dir.exist?(File.join(TwoCho::Config.webserver.home, folder))
+        Dir.mkdir File.join(TwoCho::Config.webserver.home, folder)
       end
 
       server_file_path = File.join(folder, File.basename(file))
 
-      File.rename(file, File.join(ENV["WEBSERVER_HOME"], server_file_path))
+      File.rename(file, File.join(TwoCho::Config.webserver.home, server_file_path))
 
-      "https://#{ENV["URL_BASE"]}/#{server_file_path}"
+      "https://#{TwoCho::Config.webserver.domain}/#{server_file_path}"
     end
   end
 end
