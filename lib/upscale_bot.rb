@@ -50,7 +50,7 @@ module TwoCho
 
           output_file_path = File.join("tmp", "output", "#{File.basename(input_file, ".*")}.png")
 
-          success = upscale_image input_flie.path, output_file_path
+          success = upscale_image input_file.path, output_file_path
 
           unless success
             event.message.reply! "Something went wrong"
