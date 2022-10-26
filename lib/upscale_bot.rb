@@ -68,9 +68,9 @@ module TwoCho
               success_messages,
               attachments: [output_file]
             )
-          end
 
-          File.delete(output_file)
+            File.delete(output_file)
+          end
         end
       end
     end
