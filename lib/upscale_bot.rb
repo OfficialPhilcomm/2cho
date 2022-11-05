@@ -25,6 +25,11 @@ module TwoCho
       @bot = Discordrb::Bot.new(token: TwoCho::Config.discord.token)
 
       bot.mention in: "#screenshots" do |event|
+        unless TwoCho::Config.discord.allowed_servers.include? event.server.id
+          event.respond "This server is not whitelisted in the config"
+          next
+        end
+
         unless event.message.attachments.any?
           event.respond "I can only upscale an image if you attach one to the message you ping me in"
           next
