@@ -39,7 +39,7 @@ module TwoCho
         Tempfile.create(["2cho", ".#{image_file_type}"], "tmp/input") do |input_file|
           input_file.write HTTParty.get(attachment.url).body
 
-          output_file_path = File.join("tmp", "output", "#{File.basename(input_file, ".*")}.png")
+          output_file_path = File.join(Dir.pwd, "tmp", "output", "#{File.basename(input_file, ".*")}.png")
 
           success = upscale_image input_file.path, output_file_path
 
