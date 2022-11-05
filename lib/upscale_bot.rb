@@ -25,27 +25,12 @@ module TwoCho
       @bot = Discordrb::Bot.new(token: TwoCho::Config.discord.token)
 
       bot.mention in: "#screenshots" do |event|
-        unless TwoCho::Config.discord.allowed_servers.include? event.server.id
-          event.respond "This server is not whitelisted in the config"
-          next
-        end
-
-        unless event.message.attachments.any?
-          event.respond "I can only upscale an image if you attach one to the message you ping me in"
-          next
-        end
-
-        unless event.message.attachments.one?
-          event.respond "Please send only one image per message for now (this is being worked on)"
-          next
-        end
+        next unless server_whitelisted! event
+        next unless any_attachments! event
+        next unless one_attachment! event
+        next unless attachment_is_image! event
 
         attachment = event.message.attachments.first
-
-        unless attachment.image?
-          event.respond "Please attach an image"
-          next
-        end
 
         image_file_type = attachment.filename.match(/\.(?<type>png|jpg|jpeg)$/)[:type]
 
@@ -120,6 +105,44 @@ module TwoCho
       File.rename(file, File.join(TwoCho::Config.webserver.home, server_file_path))
 
       "https://#{TwoCho::Config.webserver.domain}/#{server_file_path}"
+    end
+
+    def server_whitelisted!(event)
+      if TwoCho::Config.discord.allowed_servers.include? event.server.id
+        true
+      else
+        event.respond "This server is not whitelisted in the config"
+        false
+      end
+    end
+
+    def any_attachments!(event)
+      if event.message.attachments.any?
+        true
+      else
+        event.respond "I can only upscale an image if you attach one to the message you ping me in"
+        false
+      end
+    end
+
+    def one_attachment!(event)
+      if event.message.attachments.one?
+        true
+      else
+        event.respond "Please send only one image per message for now (this is being worked on)"
+        false
+      end
+    end
+
+    def attachment_is_image!(event)
+      attachment = event.message.attachments.first
+
+      if attachment.image?
+        true
+      else
+        event.respond "Please attach an image"
+        false
+      end
     end
   end
 end
