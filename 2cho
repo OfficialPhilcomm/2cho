@@ -4,8 +4,6 @@ require "fileutils"
 require_relative "lib/config"
 require_relative "lib/upscale_bot"
 
-TwoCho::Config.init
-
 if ARGV[0] == "clean"
   folders = Dir.entries(TwoCho::Config.webserver.home).select do |entry|
     File.directory?(File.join(TwoCho::Config.webserver.home, entry)) &&
