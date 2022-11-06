@@ -5,7 +5,7 @@ require_relative "config"
 require_relative "upscale_request"
 
 module TwoCho
-  class TwoCho::UpscaleBot
+  class UpscaleBot
     attr_reader :bot
 
     def initialize
@@ -22,7 +22,7 @@ module TwoCho
       @bot = Discordrb::Bot.new(token: TwoCho::Config.discord.token)
 
       bot.mention in: "#screenshots" do |event|
-        UpscaleRequest.new(event).run
+        TwoCho::UpscaleRequest.new(event).run
       end
     end
   end
