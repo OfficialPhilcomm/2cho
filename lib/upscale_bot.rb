@@ -27,8 +27,8 @@ module TwoCho
         TwoCho::UpscaleRequest.new(event).run
       end
 
-      bot.message with_text: "Ping!", in: "#screenshots" do |event|
-        event.message.reply! "Pong!"
+      bot.message with_text: "Ping", in: "#screenshots" do |event|
+        event.message.reply! "Pong"
       end
     end
 
