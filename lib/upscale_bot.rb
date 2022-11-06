@@ -30,43 +30,45 @@ module TwoCho
         next unless one_attachment! event
         next unless attachment_is_image! event
 
-        attachment = event.message.attachments.first
-
-        image_file_type = attachment.filename.match(/\.(?<type>png|jpg|jpeg)$/)[:type]
-
-        event.message.reply! "Starting upscale, this can take a while"
-
-        Tempfile.create(["2cho", ".#{image_file_type}"], "tmp/input") do |input_file|
-          input_file.write HTTParty.get(attachment.url).body
-
-          output_file_path = File.join(Dir.pwd, "tmp", "output", "#{File.basename(input_file, ".*")}.png")
-
-          success = upscale_image input_file.path, output_file_path
-
-          unless success
-            event.message.reply! "Something went wrong"
-            next
-          end
-
-          output_file = File.new(output_file_path)
-
-          if file_too_big? output_file
-            url = move_file_to_storage(output_file)
-
-            event.message.reply! url
-          else
-            event.message.reply!(
-              success_messages,
-              attachments: [output_file]
-            )
-
-            File.delete(output_file)
-          end
-        end
+        process_upscale_request event
       end
     end
 
     private
+
+    def process_upscale_request(event)
+      attachment = event.message.attachments.first
+      image_file_type = attachment.filename.match(/\.(?<type>png|jpg|jpeg)$/)[:type]
+      event.message.reply! "Starting upscale, this can take a while"
+
+      Tempfile.create(["2cho", ".#{image_file_type}"], "tmp/input") do |input_file|
+        input_file.write HTTParty.get(attachment.url).body
+
+        output_file_path = File.join(Dir.pwd, "tmp", "output", "#{File.basename(input_file, ".*")}.png")
+
+        success = upscale_image input_file.path, output_file_path
+
+        unless success
+          event.message.reply! "Something went wrong"
+          next
+        end
+
+        output_file = File.new(output_file_path)
+
+        if file_too_big? output_file
+          url = move_file_to_storage(output_file)
+
+          event.message.reply! url
+        else
+          event.message.reply!(
+            success_messages,
+            attachments: [output_file]
+          )
+
+          File.delete(output_file)
+        end
+      end
+    end
 
     def success_messages
       [
