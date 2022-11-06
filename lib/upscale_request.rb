@@ -33,7 +33,7 @@ module TwoCho
     end
 
     def any_attachments!
-      if discord_event.message.attachments.any?
+      if combined_attachments.any?
         true
       else
         discord_event.respond "I can only upscale an image if you attach one to the message you ping me in"
@@ -42,7 +42,7 @@ module TwoCho
     end
 
     def one_attachment!
-      if discord_event.message.attachments.one?
+      if combined_attachments.one?
         true
       else
         discord_event.respond "Please send only one image per message for now (this is being worked on)"
@@ -51,7 +51,7 @@ module TwoCho
     end
 
     def attachment_is_image!
-      attachment = discord_event.message.attachments.first
+      attachment = combined_attachments.first
 
       if attachment.image?
         true
@@ -62,7 +62,7 @@ module TwoCho
     end
 
     def process_upscale_request
-      attachment = discord_event.message.attachments.first
+      attachment = combined_attachments.first
       image_file_type = attachment.filename.match(/\.(?<type>png|jpg|jpeg)$/)[:type]
       discord_event.message.reply! "Starting upscale, this can take a while"
 
@@ -132,6 +132,18 @@ module TwoCho
       File.rename(file, File.join(TwoCho::Config.webserver.home, server_file_path))
 
       "https://#{TwoCho::Config.webserver.domain}/#{server_file_path}"
+    end
+
+    def combined_attachments
+      @_combined_attachments ||= begin
+        attachments = discord_event.message.attachments
+
+        if discord_event.message.reply?
+          attachments += discord_event.message.referenced_message.attachments
+        end
+
+        attachments
+      end
     end
   end
 end
