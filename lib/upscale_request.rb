@@ -13,7 +13,6 @@ module TwoCho
     end
 
     def run
-      return unless server_whitelisted!
       return unless any_attachments!
       return unless one_attachment!
       return unless attachment_is_image!
@@ -22,15 +21,6 @@ module TwoCho
     end
 
     private
-
-    def server_whitelisted!
-      if TwoCho::Config.discord.allowed_servers.include? discord_event.server.id
-        true
-      else
-        discord_event.respond "This server is not whitelisted in the config"
-        false
-      end
-    end
 
     def any_attachments!
       if combined_attachments.any?
