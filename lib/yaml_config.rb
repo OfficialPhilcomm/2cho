@@ -96,11 +96,19 @@ module YAMLConfig
     def load
       @config = YAML.load_file(@config_location)
 
-      @schema.elements.each do |schema_entry|
-        obj = build_schema_entry schema_entry, @config, []
+      if @schema
+        @schema.elements.each do |schema_entry|
+          obj = build_schema_entry schema_entry, @config, []
 
-        define_singleton_method(schema_entry.name) do
-          obj
+          define_singleton_method(schema_entry.name) do
+            obj
+          end
+        end
+      else
+        @config.each do |key, value|
+          define_singleton_method(key) do
+            JSON.parse value, object_class: OpenStruct
+          end
         end
       end
     end
