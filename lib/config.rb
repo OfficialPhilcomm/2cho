@@ -1,8 +1,8 @@
-require_relative "yaml_config"
+require "strong_yaml"
 
 module TwoCho
   class Config
-    include YAMLConfig
+    include StrongYAML
 
     file "config.yml"
 
@@ -26,4 +26,4 @@ module TwoCho
   end
 end
 
-TwoCho::Config.load
+TwoCho::Config.create_or_load
