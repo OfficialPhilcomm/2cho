@@ -1,5 +1,8 @@
+.DS_Store
+
 .env
 config.yml
-tmp/
 
-.DS_Store
+tmp/
+images/
+esrgan/
