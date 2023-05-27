@@ -91,7 +91,7 @@ module TwoCho
       )
 
       if status.exitstatus != 0
-        puts stderr
+        puts "Something went wrong. Error: #{stderr}"
         false
       else
         true
