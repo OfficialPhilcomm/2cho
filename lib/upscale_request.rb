@@ -87,7 +87,7 @@ module TwoCho
 
     def upscale_image(input_file_path, output_file_path)
       _stdout, stderr, status = Open3.capture3(
-        "#{TwoCho::Config.esrgan.home}/realesrgan-ncnn-vulkan -i #{input_file_path} -o #{output_file_path} -s 2"
+        "#{TwoCho::Config.esrgan.executable} -i #{input_file_path} -o #{output_file_path} -s 2"
       )
 
       if status.exitstatus != 0

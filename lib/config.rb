@@ -15,7 +15,7 @@ module TwoCho
       end
 
       group :esrgan do
-        string :home
+        string :executable
       end
 
       group :webserver do
