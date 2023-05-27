@@ -21,6 +21,7 @@ module TwoCho
       group :webserver do
         string :home
         string :domain
+        integer :keep_images_for_days
       end
     end
   end

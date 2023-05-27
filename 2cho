@@ -8,7 +8,7 @@ if ARGV[0] == "clean"
   folders = Dir.entries(TwoCho::Config.webserver.home).select do |entry|
     File.directory?(File.join(TwoCho::Config.webserver.home, entry)) &&
       entry.match(/\d{8}/) &&
-      (Date.today - Date.parse(entry)) > 2
+      (Date.today - Date.parse(entry)) > TwoCho::Config.webserver.keep_images_for_days
   end
 
   folders.each do |folder|
