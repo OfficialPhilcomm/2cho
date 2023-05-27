@@ -30,6 +30,10 @@ module TwoCho
       bot.message with_text: "Ping", in: "#screenshots" do |event|
         event.message.reply! "Pong"
       end
+
+      bot.message with_text: "Ruby", in: "#screenshots" do |event|
+        event.message.reply! RUBY_VERSION
+      end
     end
 
     def server_whitelisted!(event)
