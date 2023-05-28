@@ -118,17 +118,21 @@ module TwoCho
     end
 
     def move_file_to_storage(file)
-      folder = Date.today.strftime("%Y%m%d")
+      if Settings.production?
+        folder = Date.today.strftime("%Y%m%d")
 
-      if !Dir.exist?(File.join(TwoCho::Config.webserver.home, folder))
-        Dir.mkdir File.join(TwoCho::Config.webserver.home, folder)
+        if !Dir.exist?(File.join(TwoCho::Config.webserver.home, folder))
+          Dir.mkdir File.join(TwoCho::Config.webserver.home, folder)
+        end
+
+        server_file_path = File.join(folder, File.basename(file))
+
+        FileUtils.mv(file, File.join(TwoCho::Config.webserver.home, server_file_path))
+
+        "#{TwoCho::Config.webserver.use_https ? "https" : "http"}://#{TwoCho::Config.webserver.domain}/#{server_file_path}"
+      else
+        "http://swhost.no/test.png"
       end
-
-      server_file_path = File.join(folder, File.basename(file))
-
-      FileUtils.mv(file, File.join(TwoCho::Config.webserver.home, server_file_path))
-
-      "#{TwoCho::Config.webserver.use_https ? "https" : "http"}://#{TwoCho::Config.webserver.domain}/#{server_file_path}"
     end
 
     def combined_attachments
