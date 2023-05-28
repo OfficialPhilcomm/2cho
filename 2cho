@@ -1,6 +1,9 @@
 #!/usr/bin/env ruby
+require "bundler/setup"
 require_relative "lib/commands/base"
 require_relative "lib/commands/clean"
+
+Bundler.require(:default)
 
 cmd, args = case ARGV[0]
 when "clean"
