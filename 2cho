@@ -1,19 +1,13 @@
 #!/usr/bin/env ruby
-require "time"
-require "fileutils"
-require_relative "lib/config"
-require_relative "lib/upscale_bot"
+require_relative "lib/commands/base"
+require_relative "lib/commands/clean"
 
-if ARGV[0] == "clean"
-  folders = Dir.entries(TwoCho::Config.webserver.home).select do |entry|
-    File.directory?(File.join(TwoCho::Config.webserver.home, entry)) &&
-      entry.match(/\d{8}/) &&
-      (Date.today - Date.parse(entry)) > TwoCho::Config.webserver.keep_images_for_days
-  end
-
-  folders.each do |folder|
-    FileUtils.rm_rf File.join(TwoCho::Config.webserver.home, folder)
-  end
+cmd, args = case ARGV[0]
+when "clean"
+  [TwoCho::Commands::Clean.new, ARGV]
 else
-  TwoCho::UpscaleBot.new.run
+  [TwoCho::Commands::Base.new, ARGV]
 end
+
+cmd.parse args
+cmd.run
