@@ -2,6 +2,7 @@ require "time"
 require "open3"
 require "httparty"
 require "tempfile"
+require "fileutils"
 require_relative "config"
 
 module TwoCho
@@ -119,7 +120,7 @@ module TwoCho
 
       server_file_path = File.join(folder, File.basename(file))
 
-      File.rename(file, File.join(TwoCho::Config.webserver.home, server_file_path))
+      FileUtils.mv(file, File.join(TwoCho::Config.webserver.home, server_file_path))
 
       "https://#{TwoCho::Config.webserver.domain}/#{server_file_path}"
     end
