@@ -4,6 +4,7 @@ require "httparty"
 require "tempfile"
 require "fileutils"
 require_relative "config"
+require_relative "settings"
 
 module TwoCho
   class UpscaleRequest
@@ -87,14 +88,19 @@ module TwoCho
     end
 
     def upscale_image(input_file_path, output_file_path)
-      _stdout, stderr, status = Open3.capture3(
-        "#{TwoCho::Config.esrgan.executable} -i #{input_file_path} -o #{output_file_path} -s 2"
-      )
+      if Settings.production?
+        _stdout, stderr, status = Open3.capture3(
+          "#{TwoCho::Config.esrgan.executable} -i #{input_file_path} -o #{output_file_path} -s 2"
+        )
 
-      if status.exitstatus != 0
-        puts "Something went wrong. Error: #{stderr}"
-        false
+        if status.exitstatus != 0
+          puts "Something went wrong. Error: #{stderr}"
+          false
+        else
+          true
+        end
       else
+        FileUtils.cp(input_file_path, output_file_path)
         true
       end
     end
