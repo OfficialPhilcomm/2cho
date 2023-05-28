@@ -122,7 +122,7 @@ module TwoCho
 
       FileUtils.mv(file, File.join(TwoCho::Config.webserver.home, server_file_path))
 
-      "https://#{TwoCho::Config.webserver.domain}/#{server_file_path}"
+      "#{TwoCho::Config.use_https ? "https" : "http"}://#{TwoCho::Config.webserver.domain}/#{server_file_path}"
     end
 
     def combined_attachments

@@ -19,6 +19,7 @@ module TwoCho
       end
 
       group :webserver do
+        boolean :use_https
         string :home
         string :domain
         integer :keep_images_for_days
