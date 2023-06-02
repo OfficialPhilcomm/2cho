@@ -57,10 +57,12 @@ module TwoCho
     def image_is_too_big!
       image = combined_attachments.first
 
-      discord_event.message.reply! [
-        "Width: #{image.width} Height: #{image.height}",
-        "Total pixel count: #{image.width * image.height}"
-      ].join("\n")
+      if Settings.development?
+        discord_event.message.reply! [
+          "Width: #{image.width} Height: #{image.height}",
+          "Total pixel count: #{image.width * image.height}"
+        ].join("\n")
+      end
 
       if image.width * image.height > 3686400
         discord_event.message.reply! "Your image is estimated to be above 1440p. Due to processing limitations, I cannot upscale your image."
