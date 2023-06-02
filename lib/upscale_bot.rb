@@ -2,6 +2,7 @@ require "pry"
 require "time"
 require "discordrb"
 require_relative "config"
+require_relative "settings"
 require_relative "upscale_request"
 
 module TwoCho
@@ -28,7 +29,11 @@ module TwoCho
       end
 
       bot.message with_text: "Ping", in: "#screenshots" do |event|
-        event.message.reply! "Pong"
+        if Settings.development?
+          event.message.reply! "Pong, but from development"
+        else
+          event.message.reply! "Pong"
+        end
       end
 
       bot.message with_text: "Ruby", in: "#screenshots" do |event|
