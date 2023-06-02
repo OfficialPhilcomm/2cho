@@ -64,8 +64,8 @@ module TwoCho
         ].join("\n")
       end
 
-      if image.width * image.height > 3686400
-        discord_event.message.reply! "Your image is estimated to be above 1440p. Due to processing limitations, I cannot upscale your image."
+      if image.width * image.height > 8294400
+        discord_event.message.reply! "Your image is estimated to be above 4k. Due to processing limitations, I cannot upscale your image."
         true
       else
         false
