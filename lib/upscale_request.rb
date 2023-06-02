@@ -29,7 +29,7 @@ module TwoCho
       if combined_attachments.any?
         true
       else
-        discord_event.respond "I can only upscale an image if you attach one to the message you ping me in"
+        discord_event.message.reply! "I can only upscale an image if you attach one to the message you ping me in"
         false
       end
     end
@@ -38,7 +38,7 @@ module TwoCho
       if combined_attachments.one?
         true
       else
-        discord_event.respond "Please send only one image per message for now (this is being worked on)"
+        discord_event.message.reply! "Please send only one image per message for now (this is being worked on)"
         false
       end
     end
@@ -49,7 +49,7 @@ module TwoCho
       if attachment.image?
         true
       else
-        discord_event.respond "Please attach an image"
+        discord_event.message.reply! "Please attach an image"
         false
       end
     end
