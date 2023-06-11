@@ -22,18 +22,18 @@ module TwoCho
     def build_bot
       @bot = Discordrb::Bot.new(token: TwoCho::Config.discord.token)
 
-      bot.mention in: "#screenshots" do |event|
-        next unless server_whitelisted! event
-
-        TwoCho::UpscaleRequest.new(event).run
-      end
-
       channels = Config
         .discord
         .channels
         .map do |channel|
           "##{channel}"
         end
+
+      bot.mention in: channels do |event|
+        next unless server_whitelisted! event
+
+        TwoCho::UpscaleRequest.new(event).run
+      end
 
       bot.message with_text: "Ping", in: channels do |event|
         if Settings.development?
