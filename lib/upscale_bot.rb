@@ -28,7 +28,14 @@ module TwoCho
         TwoCho::UpscaleRequest.new(event).run
       end
 
-      bot.message with_text: "Ping", in: "#screenshots" do |event|
+      channels = Config
+        .discord
+        .channels
+        .map do |channel|
+          "##{channel}"
+        end
+
+      bot.message with_text: "Ping", in: channels do |event|
         if Settings.development?
           event.message.reply! "Pong, but from development"
         else

@@ -12,6 +12,7 @@ module TwoCho
         string :public_key
         string :token
         list :allowed_servers
+        list :channels
       end
 
       group :esrgan do
