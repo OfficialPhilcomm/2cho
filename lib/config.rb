@@ -11,8 +11,8 @@ module TwoCho
         integer :application_id
         string :public_key
         string :token
-        list :allowed_servers
-        list :channels
+
+        list :servers
       end
 
       group :esrgan do
