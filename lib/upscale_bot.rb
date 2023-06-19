@@ -30,7 +30,8 @@ module TwoCho
       end
 
       bot.message with_text: "Ping" do |event|
-        next unless channel_allowed_for_server! event
+        next unless server_whitelisted! event, message: false
+        next unless channel_allowed_for_server! event, message: false
 
         if Settings.development?
           event.message.reply! "Pong, but from development"
@@ -40,22 +41,23 @@ module TwoCho
       end
 
       bot.message with_text: "Ruby" do |event|
-        next unless channel_allowed_for_server! event
+        next unless server_whitelisted! event, message: false
+        next unless channel_allowed_for_server! event, message: false
 
         event.message.reply! RUBY_VERSION
       end
     end
 
-    def server_whitelisted!(event)
+    def server_whitelisted!(event, message: true)
       if allowed_servers.include? event.server.id
         true
       else
-        event.respond "This server is not whitelisted in the config"
+        event.respond "This server is not whitelisted in the config" if message
         false
       end
     end
 
-    def channel_allowed_for_server!(event)
+    def channel_allowed_for_server!(event, message: true)
       server_channels = TwoCho::Config
         .discord
         .servers
@@ -67,7 +69,7 @@ module TwoCho
         .include? event.channel.name
 
       if !ok
-        event.message.reply! "I cannot upscale images in this channel. The allowed channels for this server are:\n#{server_channels_to_message(server_channels)}"
+        event.message.reply! "I cannot upscale images in this channel. The allowed channels for this server are:\n#{server_channels_to_message(event.server.id, server_channels)}" if message
       end
 
       ok
