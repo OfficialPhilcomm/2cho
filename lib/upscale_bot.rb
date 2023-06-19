@@ -30,7 +30,7 @@ module TwoCho
       end
 
       bot.message with_text: "Ping" do |event|
-        next unless channel_allowed_for_server!
+        next unless channel_allowed_for_server! event
 
         if Settings.development?
           event.message.reply! "Pong, but from development"
@@ -40,7 +40,7 @@ module TwoCho
       end
 
       bot.message with_text: "Ruby" do |event|
-        next unless channel_allowed_for_server!
+        next unless channel_allowed_for_server! event
 
         event.message.reply! RUBY_VERSION
       end
