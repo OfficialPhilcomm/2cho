@@ -65,8 +65,10 @@ module TwoCho
           server["id"] == event.server.id
         end["channels"]
 
-      ok = server_channels
-        .include? event.channel.name
+      ok = (
+        server_channels.include?(event.channel.name) ||
+        server_channels.include?(event.channel.id)
+      )
 
       if !ok
         event.message.reply! "I cannot upscale images in this channel. The allowed channels for this server are:\n#{server_channels_to_message(event.server.id, server_channels)}" if message
@@ -84,9 +86,19 @@ module TwoCho
         end
     end
 
-    def server_channels_to_message(server_channels)
+    def server_channels_to_message(server, server_channels)
       server_channels.map do |channel|
-        "\`#{channel}\`"
+        if channel.is_a? Integer
+          name = bot
+            .servers[server]
+            .channels
+            .find do |c|
+              c.id == channel
+            end&.name || "\`Can't be resolved: #{channel}\`"
+          "\`#{name}\`"
+        else
+          "\`#{channel}\`"
+        end
       end.join("\n")
     end
   end
