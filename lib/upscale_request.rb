@@ -114,8 +114,6 @@ module TwoCho
           "#{TwoCho::Config.esrgan.executable} -i #{input_file_path} -o #{output_file_path} -s 2"
         )
 
-        discord_event.message.reply! "Upscale took #{Time.now - start_time} seconds"
-
         if status.exitstatus != 0
           puts "Something went wrong. Error: #{stderr}"
           false
